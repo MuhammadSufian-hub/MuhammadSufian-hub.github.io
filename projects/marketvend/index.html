@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.classList.add('js'); if(location.search.indexOf('static')>=0) document.documentElement.classList.add('static')</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IoT Vending Platform: DA16200 Firmware, AWS IoT Backend and Stripe Connect Payments</title>
+<meta name="description" content="Case study: an end to end vending platform. Custom DA16200 firmware in C tuned for battery life, AWS IoT Core, Lambda and DynamoDB, Stripe Connect marketplace payouts, and a Next.js operator console. QR to slot open in seconds.">
+<link rel="canonical" href="https://sufian.soviotech.com/projects/marketvend/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Muhammad Sufian">
+<meta name="theme-color" content="#121417">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Muhammad Sufian">
+<meta property="og:title" content="IoT Vending Platform: DA16200 Firmware, AWS IoT Backend and Stripe Connect Payments">
+<meta property="og:description" content="Case study: an end to end vending platform. Custom DA16200 firmware in C tuned for battery life, AWS IoT Core, Lambda and DynamoDB, Stripe Connect marketplace payouts, and a Next.js operator console. QR to slot open in seconds.">
+<meta property="og:url" content="https://sufian.soviotech.com/projects/marketvend/">
+<meta property="og:image" content="https://sufian.soviotech.com/assets/covers/marketvend.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="IoT Vending Platform: DA16200 Firmware, AWS IoT Backend and Stripe Connect Payments">
+<meta name="twitter:description" content="Case study: an end to end vending platform. Custom DA16200 firmware in C tuned for battery life, AWS IoT Core, Lambda and DynamoDB, Stripe Connect marketplace payouts, and a Next.js operator console. QR to slot open in seconds.">
+<meta name="twitter:image" content="https://sufian.soviotech.com/assets/covers/marketvend.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231c1c1a'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='system-ui,sans-serif' font-weight='700' font-size='15' fill='%23f6f5f2'%3EMS%3C/text%3E%3C/svg%3E">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://sufian.soviotech.com/"}, {"@type": "ListItem", "position": 2, "name": "Work", "item": "https://sufian.soviotech.com/#work"}, {"@type": "ListItem", "position": 3, "name": "MarketVend vending platform", "item": "https://sufian.soviotech.com/projects/marketvend/"}]}, {"@type": "CreativeWork", "@id": "https://sufian.soviotech.com/projects/marketvend/#work", "name": "MarketVend vending platform", "headline": "IoT Vending Platform: DA16200 Firmware, AWS IoT Backend and Stripe Connect Payments", "description": "Case study: an end to end vending platform. Custom DA16200 firmware in C tuned for battery life, AWS IoT Core, Lambda and DynamoDB, Stripe Connect marketplace payouts, and a Next.js operator console. QR to slot open in seconds.", "url": "https://sufian.soviotech.com/projects/marketvend/", "image": "https://sufian.soviotech.com/assets/covers/marketvend.jpg", "inLanguage": "en", "dateModified": "2026-09-26", "author": {"@type": "Person", "name": "Muhammad Sufian", "url": "https://sufian.soviotech.com/"}, "creator": {"@type": "Person", "name": "Muhammad Sufian", "url": "https://sufian.soviotech.com/"}, "keywords": "DA16200, AWS IoT, Stripe Connect, Next.js, Cloud · Firmware", "isPartOf": {"@type": "WebSite", "url": "https://sufian.soviotech.com/", "name": "Muhammad Sufian, embedded firmware and PCB design portfolio"}, "sameAs": "https://github.com/MuhammadSufian-hub/Marketplace-Vending-Platform"}]}</script>
+<style>
+:root{--bg:#f4f3ef; --paper:#fff; --ink:#1d1d1b; --ink-2:#4b4a46; --muted:#77756f; --line:#dcdad3; --line-2:#ebe9e3; --accent:#1f6b47; --accent-2:#2f9d69; --accent-soft:#e6f0ea; --hero:#121417; --hero-2:#1a1e23; --hero-ink:#f2f1ec; --hero-muted:#a9aca8; --glow:#37b57a; --glow-2:#d8a04a; --pic:#f7f6f2}
+@media (prefers-color-scheme:dark){:root{--bg:#141618; --paper:#1c1f23; --ink:#ecebe6; --ink-2:#c9c7c0; --muted:#8f8e88; --line:#2f3337; --line-2:#272b2f; --accent:#6fbf94; --accent-2:#8fd4ad; --accent-soft:#1f2c25; --pic:#e8e7e2}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--bg); color:var(--ink); font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden}
+a{color:var(--accent)} img{display:block; max-width:100%}
+.wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+h1,h2,h3{line-height:1.15; margin:0; letter-spacing:-.01em}
+.top{position:sticky; top:0; z-index:30; background:color-mix(in srgb,var(--hero) 82%,transparent); backdrop-filter:blur(10px); border-bottom:1px solid rgba(255,255,255,.08)}
+.top .wrap{display:flex; align-items:center; justify-content:space-between; height:60px; gap:16px}
+.top .name{font-weight:700; text-decoration:none; color:var(--hero-ink); display:flex; align-items:center; gap:10px}
+.top .name i{width:9px; height:9px; border-radius:50%; background:var(--glow); animation:ping 2.4s ease-out infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--glow) 55%,transparent)} 100%{box-shadow:0 0 0 10px transparent}}
+.top nav{display:flex; gap:22px; align-items:center}
+.top nav a{text-decoration:none; color:var(--hero-muted); font-size:14.5px} .top nav a:hover{color:var(--hero-ink)}
+.top nav .gh{padding:7px 12px; border:1px solid rgba(255,255,255,.18); border-radius:6px; color:var(--hero-ink)}
+.head{position:relative; background:radial-gradient(110% 90% at 85% 0%,var(--hero-2),var(--hero) 60%); color:var(--hero-ink); overflow:hidden; margin-top:-60px; padding-top:60px}
+#traces{position:absolute; inset:0; width:100%; height:100%; opacity:.7}
+.head .wrap{position:relative; z-index:2; display:grid; grid-template-columns:1.05fr .95fr; gap:44px; align-items:center; padding:56px 20px 64px}
+.crumbs{font-size:13px; color:var(--hero-muted); margin:0 0 18px; display:flex; gap:8px; flex-wrap:wrap}
+.crumbs a{color:var(--hero-muted); text-decoration:none} .crumbs a:hover{color:var(--hero-ink)}
+.label{margin:0 0 12px; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent-2); display:flex; align-items:center; gap:8px}
+.label::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--accent-2)}
+.head h1{font-size:clamp(30px,4.2vw,50px); font-weight:750; letter-spacing:-.02em}
+.head .lead{font-size:18.5px; color:var(--hero-muted); margin:18px 0 22px; max-width:56ch}
+.chips{list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:6px}
+.chips li{font-size:12.5px; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,.08); color:var(--hero-ink)}
+.nda{display:inline-block; margin-top:16px; font-size:13px; color:var(--glow-2); border:1px solid color-mix(in srgb,var(--glow-2) 45%,transparent); border-radius:6px; padding:4px 10px}
+.figure{position:relative; border-radius:14px; background:var(--pic); aspect-ratio:16/10; overflow:hidden; box-shadow:0 40px 80px -30px rgba(0,0,0,.8)}
+.figure::before{content:""; position:absolute; inset:-30%; background:conic-gradient(from 0deg,var(--glow),transparent 30%,var(--glow-2) 50%,transparent 70%,var(--glow)); filter:blur(40px); opacity:.35; animation:spin 16s linear infinite; z-index:0}
+.figure img{position:absolute; inset:18px; width:calc(100% - 36px); height:calc(100% - 36px); object-fit:contain; z-index:1}
+@keyframes spin{to{transform:rotate(360deg)}}
+.rise{opacity:0; transform:translateY(22px); animation:rise .9s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes rise{to{opacity:1; transform:none}}
+main .wrap{display:grid; grid-template-columns:1fr 340px; gap:48px; padding-top:56px; padding-bottom:56px}
+article h2{font-size:22px; font-weight:700; margin:34px 0 12px; position:relative; padding-bottom:8px}
+article h2::after{content:""; position:absolute; left:0; bottom:0; width:40px; height:3px; background:linear-gradient(90deg,var(--accent),var(--glow-2))}
+article h2:first-child{margin-top:0}
+article p{margin:0 0 14px; font-size:16.5px; color:var(--ink-2)}
+article ul{margin:0 0 14px; padding-left:20px; color:var(--ink-2)} article li{margin-bottom:8px}
+.result{border-left:3px solid var(--accent-2); padding:12px 16px; background:var(--paper); border-radius:0 10px 10px 0; font-size:16.5px; color:var(--ink)}
+aside{position:sticky; top:80px; align-self:start; display:flex; flex-direction:column; gap:16px}
+.box{background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:18px 20px}
+.box h3{font-size:12.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:10px}
+.box p{margin:0; font-size:14.5px; color:var(--ink-2)}
+.box ul{margin:0; padding-left:18px; font-size:14.5px; color:var(--ink-2)} .box li{margin-bottom:6px}
+.btn{display:inline-flex; align-items:center; gap:8px; padding:11px 16px; border-radius:8px; border:1px solid var(--line); background:var(--paper); color:var(--ink); text-decoration:none; font-weight:600; font-size:14.5px; transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px); box-shadow:0 10px 24px -12px rgba(0,0,0,.45)}
+.btn.main{background:var(--accent); border-color:var(--accent); color:#fff}
+.btns{display:flex; flex-direction:column; gap:8px}
+.related{border-top:1px solid var(--line); padding:48px 0 64px}
+.related h2{font-size:22px; margin-bottom:18px}
+.grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+.card{background:var(--paper); border:1px solid var(--line); border-radius:12px; overflow:hidden; text-decoration:none; color:inherit; display:flex; flex-direction:column; transition:transform .25s,box-shadow .3s,border-color .3s}
+.card:hover{transform:translateY(-5px); border-color:color-mix(in srgb,var(--accent) 55%,var(--line)); box-shadow:0 24px 44px -24px rgba(0,0,0,.5)}
+.card .pic{position:relative; aspect-ratio:16/10; background:var(--pic); border-bottom:1px solid var(--line-2)}
+.card .pic img{position:absolute; inset:10px; width:calc(100% - 20px); height:calc(100% - 20px); object-fit:contain}
+.card div{padding:14px 16px 16px} .card .l{margin:0 0 6px; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+.card h3{font-size:16px; font-weight:650}
+.cta{background:var(--hero); color:var(--hero-ink); padding:48px 0}
+.cta .wrap{display:grid; grid-template-columns:1fr auto; gap:24px; align-items:center}
+.cta h2{font-size:clamp(22px,3vw,32px)} .cta p{margin:6px 0 0; color:var(--hero-muted)}
+.cta .btn{background:transparent; border-color:rgba(255,255,255,.22); color:var(--hero-ink)} .cta .btn.main{background:var(--accent-2); border-color:var(--accent-2); color:#0d1a13}
+footer{background:var(--hero); color:var(--hero-muted); padding:18px 0 26px; font-size:13px; border-top:1px solid rgba(255,255,255,.08)}
+footer .wrap{display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px} footer a{color:var(--hero-muted)}
+html.js .reveal{opacity:0; transform:translateY(24px); transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+html.js .reveal.in{opacity:1; transform:none}
+@media (max-width:980px){ .head .wrap{grid-template-columns:1fr; gap:28px} main .wrap{grid-template-columns:1fr} aside{position:static} .grid{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:760px){ .top nav .hide{display:none} .cta .wrap{grid-template-columns:1fr} }
+@media (max-width:560px){ .grid{grid-template-columns:1fr} }
+@media (prefers-reduced-motion:reduce){ *{animation:none!important; transition:none!important} html.js .reveal,.rise{opacity:1; transform:none} #traces{display:none} }
+html.static .reveal,html.static .rise{opacity:1!important; transform:none!important; animation:none!important}
+a:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="name" href="../../"><i></i>Muhammad Sufian</a>
+  <nav><a class="hide" href="../../#work">Work</a><a class="hide" href="../../#services">What I do</a><a class="hide" href="../../#about">About</a><a class="gh" href="https://github.com/MuhammadSufian-hub" target="_blank" rel="noopener">GitHub</a></nav>
+</div></header>
+
+<section class="head">
+  <canvas id="traces" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div>
+      <p class="crumbs rise"><a href="../../">Home</a><span>/</span><a href="../../#work">Work</a><span>/</span><span>MarketVend vending platform</span></p>
+      <p class="label rise" style="animation-delay:.05s">Cloud · Firmware</p>
+      <h1 class="rise" style="animation-delay:.12s">MarketVend vending platform</h1>
+      <p class="lead rise" style="animation-delay:.2s">From the board on the machine to the payout in the owner&#x27;s bank account, on one stack.</p>
+      <ul class="chips rise" style="animation-delay:.28s"><li>DA16200</li><li>AWS IoT</li><li>Stripe Connect</li><li>Next.js</li></ul>
+      
+    </div>
+    <div class="figure rise" style="animation-delay:.35s"><img src="../../assets/covers/marketvend.jpg" alt="MarketVend vending platform" width="1200" height="750"></div>
+  </div>
+</section>
+
+<main><div class="wrap">
+  <article>
+    <h2>The problem</h2>
+    <p>Three hard problems sat behind a simple spec. The machine had to live in the field on 4 AA cells, so the Wi-Fi side could not stay awake. The customer experience had to be one QR scan and one tap in Stripe Checkout with the slot opening while the customer is still standing there. And the money had to flow as a marketplace: the platform takes its cut and the rest routes to the machine owner&#x27;s account without the platform&#x27;s servers ever seeing card data.</p>
+    <h2>What I did</h2>
+    <p>The machine firmware is custom C on the DA16200 with the application, TLS, MQTT and the slot drive all on one MCU, because every extra chip on the rail is current the cells do not have.</p><p>Four changes got the power path to target: a retention memory backed wake counter that survives deep sleep, cold boot gating on banner and init logs, removing the SDK&#x27;s DPM timer call that was firing every second regardless of the requested period, and a 10 second listen interval set in the DPM NVRAM so AWS IoT presence holds while the sleep gap stretches.</p><p>On the cloud side the QR scan opens a Stripe Checkout session, the success webhook drops a command into DynamoDB with a 24 hour TTL and publishes to the machine&#x27;s MQTT topic, and status comes back on the topic the dashboard watches. Every checkout carries transfer data routing funds to the owner&#x27;s connected account with the platform fee on top. The Next.js console gives owners machine status, command history, slot configuration and inline Stripe onboarding.</p>
+    <h2>Decisions that shaped it</h2>
+    <ul><li>DA16200 alone, no application MCU. Its deep power mode hits a battery life an ESP32 cannot on 4 AA cells.</li><li>Wake schedule in the DPM NVRAM, not in code. The right cadence should not need a flash to change.</li><li>Marketplace through Stripe Connect. The moment card data touches a server we own, the platform inherits PCI scope.</li><li>IoT endpoint cached per Lambda warm cycle instead of a describe call on every publish.</li></ul>
+    <h2>Result</h2>
+    <p class="result">Phase 1 on the bench with the power path holding the design target on 4 AA cells, continuing to the first deployed machines.</p>
+  </article>
+  <aside>
+    <div class="box reveal"><h3>Delivered</h3><ul><li>DA16200 firmware source and hardware revision notes on the power tuning</li><li>AWS infrastructure as code with Lambda handlers for commands, IoT events, machines, slots, Stripe and auth</li><li>Next.js operator console and a captive portal frontend for first time provisioning</li><li>MQTT topic design and IoT rule definitions</li></ul></div>
+    <div class="box reveal"><h3>Stack</h3><p>Renesas DA16200 in C, AWS IoT Core with mTLS, Lambda, DynamoDB, EventBridge, Stripe Checkout and Stripe Connect, Next.js, CDK in TypeScript.</p></div>
+    <div class="box reveal btns"><a class="btn main" href="https://github.com/MuhammadSufian-hub/Marketplace-Vending-Platform" target="_blank" rel="noopener">Code and files on GitHub</a><a class="btn" href="https://github.com/MuhammadSufian-hub/Marketplace-Vending-Platform/blob/main/CASE_STUDY.pdf" target="_blank" rel="noopener">Case study PDF</a><a class="btn" href="/#work">All projects</a></div>
+  </aside>
+</div></main>
+
+<section class="related"><div class="wrap">
+  <h2>Related projects</h2>
+  <div class="grid"><a class="card reveal" href="../pool-hub/"><span class="pic"><img src="../../assets/covers/pool-hub.jpg" alt="Pool automation hub firmware" loading="lazy"></span><div><p class="l">Firmware · Cloud</p><h3>Pool automation hub firmware</h3></div></a><a class="card reveal" href="../delta-plc/"><span class="pic"><img src="../../assets/covers/delta-plc.jpg" alt="Delta PLC Modbus supervisor" loading="lazy"></span><div><p class="l">Industrial · Firmware</p><h3>Delta PLC Modbus supervisor</h3></div></a><a class="card reveal" href="../rfid-tag/"><span class="pic"><img src="../../assets/covers/rfid-tag.jpg" alt="Active UHF RFID tag, 866 MHz" loading="lazy"></span><div><p class="l">Firmware · PCB · RF</p><h3>Active UHF RFID tag, 866 MHz</h3></div></a></div>
+</div></section>
+
+<section class="cta"><div class="wrap">
+  <div><h2>All 19 projects, with files.</h2><p>Boards, firmware, RF and IoT backends. Every one has a case study and the design files on GitHub.</p></div>
+  <div style="display:flex; gap:8px; flex-wrap:wrap"><a class="btn main" href="../../#work">See all work</a><a class="btn" href="https://github.com/MuhammadSufian-hub" target="_blank" rel="noopener">GitHub</a></div>
+</div></section>
+<footer><div class="wrap"><span>Muhammad Sufian. Hardware and firmware engineer.</span><a href="https://github.com/MuhammadSufian-hub" target="_blank" rel="noopener">github.com/MuhammadSufian-hub</a></div></footer>
+
+<script>
+(function(){
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if('IntersectionObserver' in window && !reduce){ var ro=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target)}})},{threshold:.1}); document.querySelectorAll('.reveal').forEach(function(el){ro.observe(el)}); } else { document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in')}); }
+  var c=document.getElementById('traces'); if(c && !reduce){
+    var ctx=c.getContext('2d'), W,H,dpr, paths=[], pulses=[];
+    function rnd(a,b){return a+Math.random()*(b-a)}
+    function build(){ dpr=Math.min(devicePixelRatio||1,2); W=c.clientWidth; H=c.clientHeight; c.width=W*dpr; c.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); paths=[]; pulses=[]; var g=26, cols=Math.ceil(W/g), rows=Math.ceil(H/g);
+      for(var k=0;k<Math.max(10,cols*rows/60);k++){ var x=Math.floor(rnd(0,cols))*g, y=Math.floor(rnd(0,rows))*g, pts=[[x,y]], dir=Math.random()<.6?0:1, segs=Math.floor(rnd(3,7));
+        for(var s=0;s<segs;s++){ var len=Math.floor(rnd(2,7))*g; if(dir===0){ var sx=Math.random()<.5?-1:1; if(Math.random()<.35){ y+=(Math.random()<.5?-1:1)*len; } x+=sx*len; } else { y+=(Math.random()<.5?-1:1)*len; } dir=1-dir; pts.push([x,y]); }
+        var seglen=[], tot=0; for(var i=1;i<pts.length;i++){ var L=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]); seglen.push(L); tot+=L; }
+        paths.push({pts:pts,seglen:seglen,tot:tot}); if(Math.random()<.7) pulses.push({p:paths.length-1,t:Math.random(),v:rnd(.0008,.002),c:Math.random()<.75?'55,181,122':'216,160,74'}); } }
+    function at(p,d){ var i=0; while(i<p.seglen.length-1 && d>p.seglen[i]){ d-=p.seglen[i]; i++; } var a=p.pts[i], b=p.pts[i+1], f=p.seglen[i]?d/p.seglen[i]:0; return [a[0]+(b[0]-a[0])*f, a[1]+(b[1]-a[1])*f]; }
+    function frame(){ ctx.clearRect(0,0,W,H); ctx.lineWidth=1.2; ctx.strokeStyle='rgba(255,255,255,.055)'; ctx.fillStyle='rgba(255,255,255,.10)';
+      paths.forEach(function(p){ ctx.beginPath(); p.pts.forEach(function(q,i){ i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]); }); ctx.stroke(); var e=p.pts[p.pts.length-1], s=p.pts[0]; ctx.beginPath(); ctx.arc(s[0],s[1],2.2,0,7); ctx.arc(e[0],e[1],2.2,0,7); ctx.fill(); });
+      pulses.forEach(function(u){ u.t+=u.v; if(u.t>1.15) u.t=-.15; var p=paths[u.p]; for(var k=0;k<14;k++){ var d=(u.t-k*.012)*p.tot; if(d<0||d>p.tot) continue; var q=at(p,d); ctx.beginPath(); ctx.fillStyle='rgba('+u.c+','+(0.55*(1-k/14))+')'; ctx.arc(q[0],q[1],2.6-k*.12,0,7); ctx.fill(); } });
+      requestAnimationFrame(frame); }
+    build(); addEventListener('resize',build); frame(); }
+})();
+</script>
+</body>
+</html>

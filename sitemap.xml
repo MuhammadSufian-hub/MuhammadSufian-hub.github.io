@@ -1,2 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://sufian.soviotech.com/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>1.0</priority></url></urlset>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url><loc>https://sufian.soviotech.com/</loc><lastmod>2026-09-26</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/awr2944/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/gan-pa/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/sband-pa/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/kband-radar/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/rf-switch/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/uwb/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/rfid-tag/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/pixhawk/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/qcc730m-lock/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/connexion-button/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/gas-monitor/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/stm32g4-dsp/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/vending/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/sujood/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/wifi-speaker/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/pool-hub/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/survey-array/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/marketvend/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sufian.soviotech.com/projects/delta-plc/</loc><lastmod>2026-09-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+</urlset>
