@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://muhammadsufian-hub.github.io/sitemap.xml
